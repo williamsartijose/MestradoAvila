@@ -12,15 +12,10 @@ Se han tratado áreas diferentes de la ciencia de datos y de la inteligencia art
 
 Así pues, en este caso práctico se va a analizar una serie temporal que muestra la producción energética mensual de una central entre 1985 y 2018. En la siguiente figura se puede ver la evolución de esta producción a lo largo de los años:
 
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Series%20temporales%20y%20modelos%20prescritivos%20Optimizaci%C3%B3n.%20Modelos%20de%20grafos/6.%20Caso%20pr%C3%A1ctico/img/img1.png)
 
 
-
-
-
-
-
-
-Se pide
+# Se pide
 
 
 
