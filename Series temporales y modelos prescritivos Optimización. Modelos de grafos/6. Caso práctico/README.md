@@ -83,7 +83,7 @@ Construir un grafo con todas las soluciones que permita elegir vecinos de forma 
 Base de datos: fichero “Electric_Production.csv”.
 
 
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Series%20temporales%20y%20modelos%20prescritivos%20Optimizaci%C3%B3n.%20Modelos%20de%20grafos/6.%20Caso%20pr%C3%A1ctico/Electric_Production.csv)
+![Electric_Production.csv](https://github.com/williamsartijose/MestradoAvila/blob/main/Series%20temporales%20y%20modelos%20prescritivos%20Optimizaci%C3%B3n.%20Modelos%20de%20grafos/6.%20Caso%20pr%C3%A1ctico/Electric_Production.csv)
 
 # "Etapa 1: Cargar los Datos"
 Las primeras líneas muestran las primeras filas de datos en tu DataFrame. En este caso, se están mostrando las cinco primeras filas del DataFrame. Cada fila representa un registro de datos con dos columnas: "DATE" (Fecha) y "IPG2211A2N" (Valor).
