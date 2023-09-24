@@ -1,0 +1,105 @@
+---
+title: "Tidyr"
+autor: "Juan Manuel Moreno"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+El Data Science se basa en gran medida en almacenar, transformar y visualizar datos y modelos estadísticos. Todos los proyectos tienen un punto común de inicio, preparar los datos para estudiarlos a través de un software destinado a ello. 
+
+Los datasets tienen diferentes formatos y en muchas ocasiones, están desorganizados y, una de las tareas que más tiempo consume (más del 80% del tiempo en proyectos de ciencia de datos es consumido en tareas de limpieza de datos) es la organización, transformación y limpieza de datos. Basándose en la idea del artículo *Tidy Data* de Hadley Wickham http://www.jstatsoft.org/v59/i10/paper surge el paquete **Tidyr**, un paquete que, como veremos a continuación nos proveerá de elegantes funciones para organizar nuestros datos y aportar un mayor sentido a nuestros datasets.
+
+Los datos organizados (*tidy*), deberían seguir la siguiente estructura:
+
+* Cada variable formar una columna.
+* Cada observación forma una fila.
+* Cada valor tiene su posición en una tabla.
+
+En **Tidyr**, nos encontramos con las siguientes funciones para organizar nuestros datos:
+
+* **`spread`**
+* **`gather`**
+* **`separate`**
+* **`unite`**
+
+Utilizaremos datasets que proporciona la librería Tidyr, por lo tanto, comenzaremos cargando la librería.
+
+```{r}
+# install.packages("tidyr")
+
+library(tidyr)
+```
+
+## Spread
+
+Toma columnas en modo clave:valor y las pivota para crear columnas en función de los valores únicos del campo clave. Para este ejemplo utilizaremos el siguiente dataset disponible en tidyr **table2**
+
+```{r}
+table2
+```
+
+```{r}
+spread(table2, type, count)
+```
+
+```{r}
+dim(table2)
+dim(spread(table2, type, count))
+```
+
+Se puede comprobar que, el número de filas queda dividido entre el número de valores únicos del campo clave.
+
+## Gather
+
+**Gather** es el caso contrario de **spread**, ya que en lugar de pivotar filas para crear columnas, aumenta la dimensionalidad en cuanto a filas. Para ejemplificar esta función, se utilizará el siguiente dataset.
+
+```{r}
+head(billboard)
+```
+```{r}
+colnames(billboard)
+```
+
+
+
+```{r}
+gather(billboard, "week", "sales", 4:ncol(billboard))
+```
+```{r}
+dim(billboard)
+dim(gather(billboard, "week", "sales", 4:ncol(billboard)))
+```
+
+## Separate
+
+La función se **separate** es muy básica, teniendo en cuenta un carácter, por ejemplo separadores de una fecha, de una hora, un email, una dirección IP, etc. Devuelve tantas columnas cómo elementos sea posible separar.
+
+```{r}
+library(dplyr)
+
+aux.tidy.billboard <- gather(billboard, "week", "sales", 4:ncol(billboard))
+
+separate(aux.tidy.billboard, date.entered, into = c("year", "month", "day"), sep = "-") %>% head()
+```
+
+## Unite
+
+Realiza lo contrario que **separate**, mediante **unite**, juntamos n columnas en una sola, a través un separador común (el separador puede ser simplemente un espacio)
+
+```{r}
+tidy.billboard <- separate(aux.tidy.billboard, date.entered, into = c("year", "month", "day"), sep = "-")
+
+new.billboard <- unite(tidy.billboard, "full_song_name", artist, track, sep = ' - ')
+```
+```{r}
+head(new.billboard)
+```
+```{r}
+colnames(new.billboard)
+```
+
+
+
+
