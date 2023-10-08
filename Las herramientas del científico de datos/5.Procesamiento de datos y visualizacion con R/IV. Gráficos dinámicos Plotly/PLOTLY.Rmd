@@ -1,0 +1,216 @@
+---
+title: "PLOTLY"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+autor: Juan Manuel Moreno
+always_allow_html: true
+---
+
+**Plotly** es un paquete destinado a la creación de gráficos interactivos, durante esta sesión, se mostrará tanto su instalación como realizar algunos gráficos simples.
+
+Para su instalación, simplemente instalamos el paquete **`plotly`**.
+```{r, warning=FALSE}
+# install.packages("plotly")
+
+library(plotly)
+```
+
+Las gráficas pueden mostrarse a través de RStudio o en el navegador web. Comenzaremos cargando la librería y obteniendo unos vectores para realizar la primera visualización.
+
+Para realizar una visualización en plotly, siempre tenemos que utilizar la función **`plot_ly`** y pasar nuestros parámetros para dibujar los ejes x e y. En plotly, escogeremos el tipo de visualización a través del parámetro **type**.
+
+```{r}
+x <- c(1, 2, 3, 8, 7, 5, 6)
+y <- c(4, 5, 6, 2, 10 ,12, 5)
+```
+
+
+## Diagrama de dispersión
+
+```{r}
+fig <- plot_ly (
+  x = x,
+  y = y,
+  type = "scatter"
+)
+
+fig
+```
+
+Además del tipo de gráfica, en plotly (para algunos tipos de visualización), podemos elegir el modo, es decir, si existirá algún patrón de unión entre las observaciones que vayamos a pintar, por ejemplo: puntos y líneas, este parámetro es **`mode`**.
+
+```{r}
+fig.sizes <- plot_ly (
+  x = x,
+  y = y,
+  type = "scatter",
+  mode = "markers",
+  size = 3,
+  alpha = 0.9
+)
+
+fig.sizes
+```
+```{r}
+fig.line <- plot_ly (
+  x = x,
+  y = y,
+  type = "scatter",
+  mode = "lines"
+)
+
+fig.line 
+```
+
+Podemos seleccionar ambos modos con *lines+markers*.
+```{r}
+fig.line <- plot_ly (
+  x = x,
+  y = y,
+  type = "scatter",
+  mode = "lines+markers"
+)
+
+fig.line 
+```
+
+```{r}
+fig <- plot_ly(
+  data = iris, x = ~Sepal.Width, y = ~Petal.Width,
+  type = "scatter",
+  color = ~Species, size = ~Sepal.Width
+)
+
+fig
+```
+
+```{r}
+vec.1 <- c(1:100)
+random_y <- rnorm(100, mean = 0)
+
+data <- data.frame("norm_1" = vec.1, 
+                   "norm_2" =random_y)
+
+fig <- plot_ly(data, x = ~norm_1, y = ~norm_2, 
+               type = 'scatter', 
+               mode = 'lines')
+
+fig
+```
+
+
+## Diagrama de barras
+
+```{r}
+fig.bar <- plot_ly (
+  x = x,
+  y = y,
+  type = "bar"
+)
+
+fig.bar 
+```
+
+Como podemos comprobar, el parámetro x es tomado como índice y por ello, el valor 4 está vacío, vemos que este hecho, no afecta a los diagramas de barras con variables categóricas.
+
+```{r}
+fig <- plot_ly(
+  x = c("Manzanas", "Naranajas", "Sandías"),
+  y = c(300, 245, 283),
+  name = "Ventas",
+  type = "bar"
+)
+
+fig
+```
+
+Para evitar el problema del primer diagrama de barras, es aconsejable utilizar dataframes
+```{r}
+fig.bar <- plot_ly (
+  data = iris,
+  x = ~Sepal.Length,
+  y = ~Sepal.Width,
+  type = "bar",
+  color = ~Species
+)
+
+fig.bar 
+```
+
+## Añadir texto a una gráfica.
+
+A una gráfica ya existente, le agregamos la función **`layout`** a la cuál le pasaremos los siguientes parámetros:
+
+* **title**: Título de la gráfica.
+* **xaxis**: Lista con el atributo **title**, si queremos desactivar este componente otorgaremos valor FALSE al atributo showgrid.
+* **yaxis**: Lista con el atributo **title**, si queremos desactivar este componente otorgaremos valor FALSE al atributo showgrid.
+
+```{r}
+x <- c(1, 2, 3, 8, 7, 5, 6, 2, 4, 14, 16, 19, 23, 5, 8)
+y <- c(4, 5, 6, 2, 10 ,12, 5, 9, 10, 11, 23, 4, 7, 6, 8)
+f <- factor(c("VALUE1", "VALUE2", "VALUE1", "VALUE1", "VALUE2", "VALUE1", "VALUE1", 
+              "VALUE1", "VALUE2", "VALUE1", "VALUE1", "VALUE2", "VALUE1", "VALUE1", "VALUE2"))
+z <- sample(15:30, 15, replace = F)
+d <- data.frame("x" = x, "y" = y, "f" = f, "z" = z)
+
+fig <- plot_ly(iris, x = ~x, y = ~y, 
+               text = ~f, color = ~f,
+               type = 'scatter', mode = 'markers', 
+        marker = list(size = ~z, opacity = 0.5))
+
+fig <- fig %>% layout(title = 'X ~ Y',
+         xaxis = list(title = "Vector X"),
+         yaxis = list(title = "Vector Y"))
+
+fig
+```
+
+## Histograma
+
+```{r}
+fig <- plot_ly(x = ~rnorm(500),
+               alpha = 0.6, 
+               type = "histogram")
+
+fig
+```
+
+```{r}
+fig <- plot_ly(alpha = 0.6)
+fig <- fig %>% add_histogram(x = ~rnorm(500))
+fig <- fig %>% add_histogram(x = ~rnorm(500) + 1)
+fig <- fig %>% layout(barmode = "overlay") # "stack" | "group" | "overlay" | "relative"
+
+fig
+```
+
+## Boxplot
+
+```{r}
+fig <- plot_ly(y = ~rnorm(50), type = "box") %>% 
+  layout(title = "Boxplot",
+             xaxis = list(showgrid = FALSE),
+             yaxis = list(showgrid = FALSE))
+
+fig
+```
+
+## Diagrama de sectores
+
+```{r}
+fig <- plot_ly(
+  data = iris,
+  labels = ~Species,
+  values = ~Sepal.Length,
+  type = 'pie'
+) %>% layout(title = "Diagrama de sectores por Species",
+             xaxis = list(showgrid = FALSE),
+             yaxis = list(showgrid = FALSE))
+fig
+```
+
+
+
+
