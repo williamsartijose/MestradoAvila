@@ -1,4 +1,4 @@
-# 2. Caso práctico
+# 3. Caso práctico
 
 Contenido de la actividad
 
@@ -6,149 +6,200 @@ Enunciado
 
 
 
-Para cada cuestión, será necesario copiar el comando que se ha ejecutado en el editor de Neo4J para responder lo que se pide en cada cuestión. Además, se deberá adjuntar una captura de la tabla (formato table o text) o grafo resultante con las columnas que se piden.
+Como recomendación para resolver el caso de negocio, es aconsejable crear una colección de prueba que contenga, por ejemplo, cuatro documentos de Valladolid y cuatro de Sevilla. De esta manera, si se aplica comando erróneo y se actualiza lo que no se quiere en la colección, simplemente habrá que hacer un drop() de la colección y volver a crearla ejecutando la sentencia insert que se presenta a continuación.
 
 
 
-Habrá alguna cuestión en la que además de adjuntar las capturas, se pide responder a alguna pregunta concreta analizando los datos obtenidos como resultado de la consulta
+Como ejemplo de la colección de prueba, se adjunta esta con los ocho primeros documentos del dataset ingestado en la colección “datos_sensores” mediante el flujo de streamsets.
 
 
 ### Caso 1:
 
-identificar el número de personas contagiadas y de personas sanas en la muestra de 40 personas. Devolver el resultado en formato table o text. Los campos a devolver se muestran a continuación: 
+crear una nueva colección llamada “sensores” e introducir en ella cuatro 
+documentos, correspondientes a cada uno de los sensores que se encuentran instalados en 
+este momento: dos en Sevilla y dos en Valladolid.
+La colección deberá contener las siguientes claves:
+- Ubicacion: tipo string, indica la ciudad en la que está instalado el sensor.
+- “medidas_sensor”: array de objetos JSON. Cada JSON tendrá dos subclaves: 
+“tipo_medida”, string que identifica lo que mide el sensor; “unidad”: string que 
+identifica las unidades en las que mide el sensor cada tipo de medida.
+- Coordenadas: array de numéricos. Los sensores de Valladolid tienen las coordenadas 
+[41.638597, -4.740186] y los de Sevilla [37.409311, -5.949939].
+- “fecha_instalación”: timestamp. Los dos sensores de Valladolid se instalaron el día 
+25 de mayo 2020 a las 10:30 AM, mientras que los de Sevilla se instalaron el 28 de 
+mayo 2020 a las 11:30 AM.
+- “location_id”: numérico que indica el ID de la ubicación a la que pertenece el sensor. 
+Valor uno para los sensores de Valladolid y valor dos para los sensores de Sevilla.
+- “tipo_sensor”: numérico que indica el tipo de sensor. Valor uno para el tipo de sensor 
+que mide temperatura y humedad relativa. Valor dos para el tipo de sensor que mide 
+emisión de CO2 y consumo eléctrico.
+La colección se creará automáticamente al insertar los cuatro documentos en una misma 
+consulta. Adjuntar captura de la consulta de inserción, así como el resultado tras 
+ejeuctarla.
 
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/2.%20Caso%20pr%C3%A1ctico/img/CASO1.png)
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO%201.png)
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO%201.1.png)
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO1.1.1.png)
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO1.1.1.1.png)
+
 
 
 ### Caso 2:
 
-Encontrar las personas sanas que han estado en contacto con una persona que ha dado positivo. Debido a que nos encontramos en las primeras fases de estudio de la enfermedad, se da por supuesto que la COVID puede infectar a personas sanas que hayan estado en un mismo lugar en el que ha estado una persona contagiada, aunque sea en diferentes días.  Identificar todas las personas sanas que han estado en el mismo lugar (sin importar fecha ni hora) en el que también ha estado una persona contagiada (lógicamente el comienzo de la visita de la persona sana tiene que ser posterior al de la persona enferma, ya que es imposible contagiarse si la persona sana ha ido antes que la contagiada). Devolver el resultado en formato table o text. 
+mostrar el número de datos recogidos por el sensor que mide la temperatura en 
+Valladolid, así como el número de datos recogidos por el de Sevilla entre los días 1 y 10 
+julio (incluido el día 10 entero).
+Haciendo cuentas, se reciben cuatro datos por hora, 96 por día, y, por tanto, en 10 días 
+debería haber 960 datos enviados por cada sensor. Comentar si no se han recibido datos
+de temperatura en algún intervalo de 15 minutos para alguno de los sensores.
 
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/2.%20Caso%20pr%C3%A1ctico/img/CASO2.png) 
+
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO%202.png) 
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO2.1.png) 
+
 
 ### Caso 3:
-mostrar grafo con las personas sanas que han coincidido con una persona contagiada, concretamente con “Marcelino Rodriguez”. Hay que mostrar en un grafo con este nodo persona, junto con todos los lugares que ha visitado, y con los nodos de etiqueta persona sana que han visitado también ese lugar posteriormente. Observando los resultados del grafo, comentar seis personas de las que han estado en alguna ubicación en la que ha estado Marcelino después de haber estado él, tienen menos riesgo que el resto de haberse contagiado que el resto: 
+se pide identificar si hay algún documento que pueda distorsionar los resultados 
+del estudio. Por ello, se quiere identificar posibles valores erróneos de temperatura 
+enviados por el sensor. 
+Se pide, por tanto, en primer lugar, identificar los documentos de la colección 
+“datos_sensores” que tengan una temperatura superior a 55 ºC, tanto para Valladolid 
+como para Sevilla (contar el número de casos en cada ciudad y mostrar también los 
+documentos erróneos). 
+A la hora de mostrar los documentos con errores, solamente se devolverán las claves: 
+timestamp, “location_id” y de la clave medidas mostrar solo el objeto correspondiente a 
+la temperatura, sin mostrar el objeto de humedad relativa. 
+Una vez se hayan identificado, se procede a eliminar estos documentos de la colección, 
+es decir: para ese timestamp solo quedará el documento correspondiente a la emisión de 
+CO2 y el consumo eléctrico.
+Además de las anteriores, se deberá adjuntar también una captura que demuestre que se 
+han eliminado correctamente dichos documentos, si es que existiera alguno
 
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/2.%20Caso%20pr%C3%A1ctico/img/CASO3.png) 
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO3.1.png) 
 
 ### Caso 4:
- construir la misma consulta anterior, pero mostrando el resultado como una tabla y no como un grafo ( formato table o text) mostrando los campos: -  Esparcidor_virus. - Comienzo_esparcimiento_virus. - Establecimiento. - Persona_en_riesgo. - Inicio_visita_persona_en_riesgo. 
+buscar el valor mínimo de temperatura en Sevilla. Se considera que es un valor 
+poco realista para Sevilla y que es necesario multiplicarlo por un factor 1,2 para hacerlo 
+un valor algo más real. 
+Nota: una vez hallado el ID del objeto a actualizar, investigar el funcionamiento de la 
+función $mul para comprobar si puede utilizarse en este caso para actualizar el valor o 
+es necesario utilizar otro modificador.
+Se deberá adjuntar una captura de la consulta de búsqueda junto con el documento al que 
+le corresponde la temperatura mínima de Sevilla. Además, también se adjuntará la 
+consulta de actualización y, por último, se mostrará todo el documento ya actualizado 
 
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/2.%20Caso%20pr%C3%A1ctico/img/CASO4.png) 
-
-
-### Caso 5.1:
-construir una tabla (formato text y table) que identifique para cada persona contagiada (columna uno), las personas sanas con las que ha coincidido en un establecimiento en el mismo tiempo. Construir como segunda columna un array de elementos JSON llamado “Contactos” con claves: ▪ Persona_en_contacto. ▪ Establecimiento. ▪ Fecha_comienzo_solapamiento.  ▪ Fecha_fin_solapamiento. Se muestra a continuación un ejemplo del formato de cada documento JSON y de los dos campos a obtener: 
-
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/2.%20Caso%20pr%C3%A1ctico/img/CASO5.1.png) 
-
-
-### Caso 5.2:
- una vez obtenida la consulta anterior, conseguir, añadiendo tres sentencias a esta, una tabla que tenga el nombre de la persona contagiada y otra columna con el número de personas sanas con las que ha tenido contacto, obteniendo ese número a partir de los elementos del array de elementos JSON. Ordenar los resultados por “Numero_de_contactos_sanos” descendente: 
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO4.png) 
 
 
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/2.%20Caso%20pr%C3%A1ctico/img/CASO5.2.png) 
+
+
+
+
+### Caso 5
+ una vez obtenida la consulta anterior, conseguir, añadiendo tres sentencias a esta, una tabla que tenga el nombre de la persona contagiada y otra columna con el número de personas sanas con las que ha tenido contacto, obteniendo ese número a partir de los elementos del array de elementos JSON. Ordenar los resultados por “Numero_de_contactos_sanos” descendente: obtener los tres máximos valores de consumo eléctrico en un día de fin de 
+semana en ambas ciudades y comparar sus valores (se considera fin de semana a partir de 
+las 16:00 del viernes y hasta las 7:45 del lunes). 
+Devolver para cada ciudad un documento con el timestamp en que se producen esos 
+máximos, el día de la semana y la hora a las que corresponden esos máximos y el valor 
+del consumo eléctrico (subclave “tipo_medida” “Consumo_electrico” + subclave “valor” 
++ subclave “unidad”, es decir: no se quieren obtener los valores de ese día de emisión de 
+CO2).
+
+
+
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO5.png) 
 
 
 ### Caso 6:
- encontrar a aquellas personas (si es que hay alguna) que visitaron un establecimiento incluso después de saber que habían dado positivo en el test. Los campos de salida a mostrar son: 
+ se considera como perjudicial para la salud cualquier día en que el acumulado 
+de las emisiones de CO2 durante el día completo supere los 420 g CO2/m2. De los 14 
+días que comprende nuestro estudio, se pretende recuperar cuántos días se superó ese 
+límite para Valladolid y, por otro lado, cuántos días se superó para Sevilla.
+Se deben adjuntar tanto la captura del número de veces que se supera el límite para cada 
+ciudad (clave “días_sobre_limite_permitido”), así como otra captura que muestre todos 
+los documentos de Valladolid, por un lado, agrupados por la clave “dia_mes” y el 
+acumulado total de emision CO2 bajo la clave “suma_Emision_CO2”, ordenados de 
+mayor a menor emisión. 
+Presentar las mismas dos capturas para Sevilla y comentar los resultados. ¿Qué tienen los 
+cuatro días de ambas ciudades en los que la emisión de CO2 es más pequeña? 
+Las consultas serán idénticas para Valladolid y Sevilla, distinguiéndose únicamente por 
+el filtrado sobre la clave “location_id”
 
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/2.%20Caso%20pr%C3%A1ctico/img/CASO6.png) 
+
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/Caso6.png) 
 
 
 
 ### Caso 7:
- CASO 7: ahora que se han obtenido todas las personas sanas que coincidieron en algún establecimiento con alguna contagiada, se quiere averiguar el tiempo exacto (duración) que coincidió cada persona sana con la persona contagiada. Expresar la duración en horas y redondeada a cuatro decimales. Devolver el resultado en formato table o text. 
-![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/2.%20Caso%20pr%C3%A1ctico/img/CASO7.png) 
+ obtener la media de emisiones de CO2 de cada ciudad por separado en la hora 
+punta de personas en la oficina, que se considera las 10 AM. Por tanto, se obtendrán por 
+un lado los registros con hora 10 en el timestamp, que midan CO2 y que sean de 
+Valladolid y obtener la media de emisiones de CO2 durante los 14 días en esa hora como 
+la clave “Avg_Emision_CO2” (recordar que cada hora se reciben cuatro valores desde el 
+sensor para cada ciudad). Mostrar los resultados ordenados por la clave 
+“Avg_Emision_CO2”, mostrando como primer documento la media más baja. Redondear 
+esta clave a dos decimales. Realizar la misma operativa con Sevilla
+
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO7.png) 
 
 
 
 
 ### Caso 8:
-una persona ha estado en dos sitios diferentes con personas contagiadas, en uno estuvo una hora y media en contacto y en el otro dos. El total de exposición de esa persona habrá sido de tres horas y media. La duración de cada contacto entre persona sana y contagiada será el resultado que se obtenga en la cuestión anterior. Por tanto, se puede utilizar la consulta anterior como base y será necesario añadirle algo más para conseguir el resultado esperado. Si una persona sana coincidió con dos contagiadas el mismo día en el mismo establecimiento, también se sumará el tiempo que estuvo en contacto con cada contagiado, entendiendo que el haber estado rodeado de más contagiados supone que esa persona tenga un mayor riesgo de contraer la enfermedad. Solamente se mostrarán en la tabla (formato table o text) las cinco personas sanas con más tiempo de exposición. A esas cinco personas se les realizará inmediatamente una llamada para que comiencen a guardar cuarentena. El tiempo total se mostrará en horas con redondeo a cuatro decimales (por ejemplo: 9,4972 horas, que serán nueve horas y 30 minutos). 
+ Se ha descubierto que el sensor de temperatura de Valladolid mide 1,5 ºC de 
+más. Por ello, se pide actualizar todos los valores correspondientes a este sensor 
+decrementando el valor de la temperatura en 1,5 ºC. 
+Antes de realizar la actualización, se ordenarán mostrando primero el de mayor 
+temperatura, y muestra los dos primeros documentos del sensor de Valladolid con la 
+mayor temperatura. Solo mostrar las siguientes claves: timestamp, “location_id”. Del 
+array de medidas solo mostrar el primer ítem, por ejemplo: "medidas" : [ { 
+"tipo_medida" : "Temperatura", "valor" : 15.75, "unidad" : 
+"ºC" } ] }. No incluir el ObjectId)
+Realizar el mismo proceso una vez que has actualizado los valores y realiza capturas de 
+los dos documentos anteriores para comprobar que se han actualizado.
 
-Resultado:
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO1.1.1.png) 
 
-Persona_sana | Persona_contagiada | Duracion_total_contacto
-----------------+--------------------+--------------------
-Ana Lopez         | Juan Garcia     | 2.000000
-Luis Fernandez     | Pedro Sanchez     | 3.000000
-Maria Perez       | Carlos Fernandez  | 4.000000
-Juan Garcia     | Ana Lopez         | 5.000000
+
+
+
 
 ### Caso 9:
-se pretende tratar de reducir la afluencia e implementar aún más medidas de precaución en aquellos establecimientos en los que hayan estado más tiempo personas contagiadas. Se pide devolver una tabla que contenga cada establecimiento, que ha sido visitado por al menos una persona contagiada, el total de visitas de contagiados en cada establecimiento, el total de visitas en cada establecimiento, el porcentaje de visitas de contagiados respecto al total de visitas de cada establecimiento, y la ciudad a la que pertenece el establecimiento. Expresar el porcentaje redondeado a dos decimales. Comentar cuáles son los dos establecimientos con mayor y los dos con menor porcentaje de visitas de contagiados respecto del total de cada establecimiento. 
+se quieren analizar los porcentajes de humedad relativa en horario laboral (8-
+18:00) de ambas ciudades. Recuperar por un lado los cinco documentos con los valores 
+mínimos de humedad relativa en Sevilla y los cinco documentos con humedad relativa 
+mínima en Valladolid por separado (ambos en horario laboral). 
+Sólo se quieren recuperar de estos documentos el timestamp y la subclave 
+medidas.tipo_medida = Humedad_relativa, junto con el valor y la unidad 
+asociados.
+Analizar si los mínimos se producen siempre en la misma franja horaria (mismo intervalo 
+de 1-2 horas, o es variable). Comentar si varían de una ciudad a otra
 
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO9.png) 
 
-Resultado:
-
-Establecimiento | Visitas_contagiados | Duracion_total_visitas | Porcentaje_contagiados | Ciudad
-----------------+--------------------+--------------------+-----------------------+------------
-Hospital Clínico | 3 | 10.5 | 28.57142857142857 | Valladolid
-Restaurante     | 2 | 6.0 | 33.33333333333333 | Valladolid
-Mercadona       | 1 | 3.0 | 33.33333333333333 | Valladolid
-
-
-
-CASO 9
-
-Snippet de código
-MATCH (c:Persona {estado: "Contagiado"}),
-(u:Ubicacion)-[r:VISITA_EMPLAZAMIENTO]->(c)
-WITH c, u
-ORDER BY COUNT(c) DESC
-RETURN
-  u.nombre AS Establecimiento,
-  COUNT(c) AS Visitas_contagiados,
-  SUM(r.fin_visita - r.inicio_visita) / 3600 AS Duracion_total_visitas,
-  (COUNT(c) / SUM(r.fin_visita - r.inicio_visita) / 3600) * 100 AS Porcentaje_contagiados,
-  u.ciudad AS Ciudad
-Use o código com cuidado. Saiba mais
-Resultado:
-
-Establecimiento | Visitas_contagiados | Duracion_total_visitas | Porcentaje_contagiados | Ciudad
-----------------+--------------------+--------------------+-----------------------+------------
-Hospital Clínico | 3 | 10.5 | 28.57142857142857 | Valladolid
-Restaurante     | 2 | 6.0 | 33.33333333333333 | Valladolid
-Mercadona       | 1 | 3.0 | 33.33333333333333 | Valladolid
-Explicación:
-
-La consulta utiliza la relación VISITA_EMPLAZAMIENTO para encontrar todos los establecimientos que han sido visitados por personas contagiadas. El filtro c.estado = "Contagiado" se utiliza para seleccionar solo a las personas que están contagiadas.
-
-Para calcular el porcentaje de visitas de contagiados, se utiliza la siguiente fórmula:
-
-Porcentaje_contagiados = (Visitas_contagiados / Duracion_total_visitas) * 100
-Comentario:
-
-Los dos establecimientos con mayor porcentaje de visitas de contagiados son:
-
-Hospital Clínico (28,57%)
-Restaurante (33,33%)
-Los dos establecimientos con menor porcentaje de visitas de contagiados son:
-
-Colegio Público (0%)
-Parque Público (0%)
-Estos dos últimos establecimientos son los que deberían ser objeto de mayor atención por parte de las autoridades sanitarias, ya que presentan un riesgo menor de contagio.
 
 
 ### Caso 10:
 
-mostrar las distancias entre los domicilios de los contagiados de Valladolid que hayan ido a un mismo establecimiento aunque haya sido en diferentes fechas.  Hay que obtener el resultado mediante una sola consulta en el editor de Neo4J. Se quiere devolver solo los tres registros Persona1 – Persona2 CONTAGIADAS de Valladolid que vivan a más distancia. Importante: evitar obtener dos registros con la misma distancia y nodos intercambiados como este:  Nota: no es necesario que los contagiados hayan coincidido en tiempo en el mismo momento en el mismo establecimiento. Devolver el nombre de ambas personas, la ciudad a la que pertenecen (que tendrá que ser Valladolid) y la distancia entre los domicilios de ambas personas contagiadas como se muestra en la imagen anterior. Tener en cuenta que aproximadamente Valladolid tiene una distancia de unos 7,5 km de punta a punta, por lo que si alguna de las distancias es mayor de este valor, será indicativo de que hay algún tipo de error. 
+se quieren actualizar todos los documentos para introducir en el array de 
+medidas dos nuevos elementos que van a ser constantes y que van a tener el valor del 
+precio del kWh y de la superficie total de la sede. 
+Solamente se añadirán a los documentos que tengan como medida el consumo eléctrico 
+(los que tienen temperatura y humedad no).
+• Los ítems a introducir son para Valladolid:
+{"precio_kWh":0.102,"unidad":"€/kWh"},{"superficie":450,"un
+idad":"m2"}
+• Los ítems a introducir son para Sevilla: 
+{"precio_kWh":0.107,"unidad":"€/kWh"},{"superficie":550,"un
+idad":"m2"}
+Para comprobar que se ha actualizado correctamente la colección, muestra cuatro 
+documentos de Sevilla y cuatro de Valladolid, correspondientes a los timestamps: 2020-
+07-01T08:00:00Z, 2020-07-01T23:15:00Z. Cada intervalo se envían dos 
+documentos desde cada ciudad: (Temperatura y Humedad_relativa) + 
+(Emision_CO2 y Consumo_electrico)
 
 
-Resultado:
-
-Persona1 | Persona2 | Ciudad | Distancia
-----------+----------+--------+-----+
-Juan Garcia | Ana Lopez | Valladolid | 7.354278078802675
-Juan Garcia | Carlos Fernandez | Valladolid | 6.70492971250275
-Ana Lopez | Carlos Fernandez | Valladolid | 6.293415014324526
-Explicación:
-
-La consulta utiliza la relación VISITA_EMPLAZAMIENTO para encontrar todas las personas contagiadas que han visitado el mismo establecimiento. El filtro c1.ciudad = "Valladolid" AND c2.ciudad = "Valladolid" se utiliza para seleccionar solo a las personas contagiadas que viven en Valladolid.
-
-Para calcular la distancia entre los domicilios de las personas contagiadas, se utiliza la función distance().
-
+![Web 0](https://github.com/williamsartijose/MestradoAvila/blob/main/Tecnolog%C3%ADa%20y%20herramientas%20Big%20Data/3.%20Caso%20pr%C3%A1ctico/img/CASO10.png) 
 
 
 
